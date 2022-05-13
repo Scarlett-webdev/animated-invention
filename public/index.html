@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Party</title>
+
+    <!-- style sheets -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Bulma CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Water+Brush&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <noscript>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      </noscript>
+
+
+      <div id="app">
+          <div class="main">
+
+            <!-- reserve form -->
+            <div class="reserve-form" v-if="state === 'reserve'">
+                <button class="select-button" @click="toggleReserveForm('default')">x</button>
+
+                <h1>YOU ARE RESERVING:</h1><br><br>
+                <h3>Seats: <br> <span v-for="res in selectedSeats"> {{res.seatNumber}} @ Table {{res.tableNumber}}<br>  </span></h3><br>
+                <h3>for {{parties[0].name}} @ {{ parties[0].time }} on {{ parties[0].date }} </h3><br><br>
+
+                <form action="/reserve-form" >
+                    <div v-for="index in 2">
+                    <input type="text" name="fName" placeholder="guest full name" required>
+                    <input type="email" name="email" placeholder="email address" required>
+                    </div><br>
+                    <input type="text" name="ccNumber" placeholder="CC Number" disabled><br><br>
+                    <p>we require a cc to hold your reservation. This card will not be charged unless reservation results in a "no-show"</p><br>
+                    <button @click="toggleReserveForm('confirmation')" type="submit" class="button is-primary">Reserve</button>
+                </form>
+            </div>
+
+
+            <!-- Success Form -->
+            <div class="reserve-form" v-if="state === 'confirmation'">
+                <button class="select-button" @click="toggleReserveForm('default')">x</button>
+
+                <h1>Thank You!</h1>
+                <h3>your reservation has been set</h3><br>
+                <h3>you will recieve a confirmation email shortly.</h3>
+            </div>
+
+
+            <!-- Initial Table View -->
+            <div class="nav-header">
+                <h1> {{ message }} </h1>
+              </div>
+              <div class="party-buttons">
+                <button v-for="party in parties" class="button is-link party-button" :class="[party.selected ? 'pb-select' : '']"> {{party.name}} </button>
+              </div>
+              <div class="party-description">
+                <p>{{ parties[0].desc }}</p><br>
+                <p> Arrive at {{ parties[0].time }} </p><br>
+              </div>
+              <div class="tables">
+                  <div class="table-one">
+                      <div class="seats">
+                        <button v-for="seat in seatsA" @click="toggleSelectSeat(seat)" :class="[seat.selected ? 'selected-seat' : '', seat.reserved ? 'reserved-seat' : '']" class="seat-button" />
+                      </div>
+                      <div class="table"></div>
+                      <div class="seats">
+                        <button v-for="seat in seatsB" @click="toggleSelectSeat(seat)" :class="[seat.selected ? 'selected-seat' : '', seat.reserved ? 'reserved-seat' : '']" class="seat-button" />
+                      </div>
+                  </div>
+                  <div class="table-two">
+                    <div class="seats">
+                        <button v-for="seat in seatsC" @click="toggleSelectSeat(seat)" :class="[seat.selected ? 'selected-seat' : '', seat.reserved ? 'reserved-seat' : '']" class="seat-button" />
+                      </div>
+                      <div class="table"></div>
+                      <div class="seats">
+                        <button v-for="seat in seatsD" @click="toggleSelectSeat(seat)" :class="[seat.selected ? 'selected-seat' : '', seat.reserved ? 'reserved-seat' : '']" class="seat-button" />
+                      </div>
+                </div>
+              </div>
+              <div class="gum">
+                <button @click="toggleReserveForm('reserve')" class="button is-dark is-large select-button">Select</button>
+              </div>
+
+              <div class="footer"> <p>© Scarlett 2022</p> </div>
+
+          </div>
+
+
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+      <script>
+          new Vue({
+
+            el: '#app',
+            data: {
+                state: "default",
+                message: "Hello World Vue",
+                parties: [
+                    {
+                        name: "Party 1",
+                        time: "6:00 pm",
+                        date: "5.22.22",
+                        desc: "Marshmallow shortbread tootsie roll cupcake cake I love. Cupcake I love sugar plum oat cake gingerbread pastry marzipan. Sugar plum sweet lollipop cookie jelly-o topping dessert soufflé caramels.",
+                        numOfGuests: 20,
+                        selected: true,
+                    },
+                    {
+                        name: "Party 2",
+                        time: "8:00 pm",
+                        date: "6.22.22",
+                        desc: "Wafer jelly beans muffin sweet roll marshmallow sweet. Gingerbread jelly-o marshmallow marzipan cookie brownie carrot cake donut. Lollipop cookie jelly beans caramels lemon drops chupa chups topping muffin chocolate.",
+                        numOfGuests: 16,
+                        selected: false,
+                    },
+                    {
+                        name: "Party 3",
+                        time: "7:00 pm",
+                        date: "7.22.22",
+                        desc: "Jelly-o halvah cookie sesame snaps soufflé. Biscuit cake muffin tootsie roll candy canes cake chupa chups. Caramels chocolate cake jelly beans jelly oat cake cookie shortbread cotton candy. Muffin ice cream croissant jujubes jujubes ice cream.",
+                        numOfGuests: 24,
+                        selected: false,
+                    },
+                ],
+                seatsA: [
+                    {
+                        seatNumber: 1,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 2,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 3,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 4,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 5,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 6,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 7,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 8,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 9,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 10,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                ],
+                seatsB: [
+                {
+                        seatNumber: 20,
+                        tableNumber: 1,
+                        reserved: true,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 19,
+                        tableNumber: 1,
+                        reserved: true,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 18,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 17,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 16,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 15,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 14,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 13,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 12,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 11,
+                        tableNumber: 1,
+                        reserved: false,
+                        selected: false,
+                    },
+                ],
+                seatsC: [
+                {
+                        seatNumber: 1,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 2,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 3,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 4,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 5,
+                        tableNumber: 2,
+                        reserved: true,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 6,
+                        tableNumber: 2,
+                        reserved: true,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 7,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 8,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 9,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 10,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                ],
+                seatsD: [
+                {
+                        seatNumber: 20,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 19,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 18,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 17,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 16,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 15,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 14,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 13,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 12,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                    {
+                        seatNumber: 11,
+                        tableNumber: 2,
+                        reserved: false,
+                        selected: false,
+                    },
+                ],
+                selectedSeats: [],
+
+            },
+            methods: {
+                toggleSelectSeat: function(seat){
+                    seat.selected = !seat.selected;
+                    if (seat.selected === true) {
+                      this.selectedSeats.push(seat);
+                    } else {
+                        this.selectedSeats.splice(this.selectedSeats.indexOf(seat), 1);
+                    }
+
+                },
+                toggleReserveForm: function(newState){
+                    this.state = newState;
+                    window.scrollTo(0, 0);
+                },
+
+            },
+          });
+
+      </script>
+
+</body>
+</html>

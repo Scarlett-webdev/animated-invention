@@ -1,0 +1,124 @@
+body {
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+
+h1 {
+       font-size: 42pt !important;
+       font-family: 'Water Brush', cursive;
+   }
+
+.main {
+    width: 90vw;
+    margin: auto;
+    background-color: lightcyan;
+    margin-bottom: 100px;
+}
+
+.reserve-form {
+    position: absolute;
+    background-color: rgba(0,0,0,.8);
+    z-index: 1;
+    height: 800px;
+    width: 90%;
+    color: antiquewhite;
+    padding-left: 50px;
+    padding-right: 5px;
+}
+
+
+.nav-header {
+    margin-top: 3%;
+
+}
+
+.tables {
+  width: 98%
+  display:flex;
+  justify-content: center;
+  /* background-color: blue; */
+}
+.gum {
+  width: 98%
+  display:flex;
+  justify-content: center;
+  /* background-color: blue; */
+}
+
+
+
+.seats {
+    width: 100%;
+    margin-top: 2%;
+    display: flex;
+    justify-content: center;
+    /* background-color: pink; */
+}
+
+.table {
+    /* margin-left: 450px;
+    margin-bottom: -20px; */
+    background-color: coral !important;
+    border-radius: 2px;
+    height: 150px;
+    width: 80%;
+    margin: auto;
+}
+
+
+.party-button {
+    margin: 2%;
+}
+
+.pb-select {
+    background-color: deepskyblue !important;
+    border: 2px solid black !important;
+}
+
+.seat-button {
+    display: inline-block;
+    margin: 1%;
+    height: 27px;
+    width: 27px;
+    border-radius: 50%;
+    background-color: darkcyan;
+    border: none;
+}
+
+.selected-seat {
+    background-color: crimson !important;
+}
+
+.reserved-seat {
+    background-color: midnightblue !important;
+}
+
+.select-button {
+    display: inline-block;
+    margin: 3%;
+}
+
+.party-description {
+    width: 95%;
+    margin: auto;
+    font-family: 'Water Brush', cursive;
+}
+
+
+
+.footer {
+    text-align: center;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 1.5rem;
+    margin-top: 50px !important;
+    /* background-color: blueviolet; */
+  }
+
+  .footer p {
+    color: #ccc;
+  }
